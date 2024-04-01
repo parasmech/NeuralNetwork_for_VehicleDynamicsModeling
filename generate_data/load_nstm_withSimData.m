@@ -2,7 +2,7 @@ clear
 close all
 clc
 
-filename = "./../inputs/trainingdata/data_to_run";
+filename = "./../inputs/trainingdata/data_to_train_13";
 % data_to_run.csv
 % data_to_train_0.csv
 % data_to_train_1.csv
@@ -24,10 +24,10 @@ run('VehParams.m');
 
 
 sample_Ti = 8.e-3;                                              % Time Step
-tiSer = 0 : sample_Ti : (length(data.x_vx_mps)-1)*sample_Ti;      % Time Series
+tiSer = 0 : sample_Ti : (length(data.vx_mps)-1)*sample_Ti;      % Time Series
 tend = tiSer(end);                                              % Stop Time
 
-vx_mps_TiSer = timeseries(data.x_vx_mps, tiSer);                  % Speed vx Data
+vx_mps_TiSer = timeseries(data.vx_mps, tiSer);                  % Speed vx Data
 vy_mps_TiSer = timeseries(data.vy_mps, tiSer);                  % Speed vy Data
 dpsi_radps_TiSer = timeseries(data.dpsi_radps, tiSer);          % Speed yaw rate Data
 ax_mps_TiSer = timeseries(data.ax_mps2, tiSer);                 % Acceleration ax Data
@@ -39,10 +39,10 @@ TwheelFL_Nm_TiSer = timeseries(data.TwheelRL_Nm*0, tiSer);      % Torque Front L
 TwheelFR_Nm_TiSer = timeseries(data.TwheelRR_Nm*0, tiSer);      % Torque Front Right Data
 pBrakeF_bar_TiSer = timeseries(data.pBrakeF_bar/2, tiSer);      % Brake pressure Front
 pBrakeR_bar_TiSer = timeseries(data.pBrakeR_bar/2, tiSer);      % Brake pressure Rear
-vx_INIT = data.x_vx_mps(1);
+vx_INIT = data.vx_mps(1);
 vy_INIT = data.vy_mps(1);
 dpsi_rad_INIT = data.dpsi_radps(1);
-omega_rad_INIT = data.x_vx_mps(1)/tireFL__MFSIMPLE__r_tire_m;
+omega_rad_INIT = data.vx_mps(1)/tireFL__MFSIMPLE__r_tire_m;
 [lambda_perc_INIT, alpha_rad_INIT] = calcWheelSlips(ones(4,1)*omega_rad_INIT, [vx_INIT; vy_INIT; dpsi_rad_INIT],...
   data.deltawheel_rad(1), VEH__VehicleData__w_TrackF_m, VEH__VehicleData__w_TrackR_m, VEH__VehicleData__l_WheelbaseF_m, VEH__VehicleData__l_WheelbaseTotal_m - VEH__VehicleData__l_WheelbaseF_m, tireFL__MFSIMPLE__r_tire_m, tireFL__MFSIMPLE__r_tire_m);
 %%
