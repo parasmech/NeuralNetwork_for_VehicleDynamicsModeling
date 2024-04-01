@@ -1,0 +1,13 @@
+# ignore folders
+/venv
+/inputs/trainedmodels
+/outputs
+/slprj/*
+/generate_data/slprj/*
+
+# ignore python specific files
+__pycache__/
+*.py[cod]
+
+*.DS_Store
+.vscode/*
