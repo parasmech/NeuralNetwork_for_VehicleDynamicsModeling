@@ -3,7 +3,7 @@
 /inputs/trainedmodels
 /outputs
 /slprj/*
-/generate_data/slprj/*
+*.slxc
 
 # ignore python specific files
 __pycache__/
