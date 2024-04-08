@@ -12,10 +12,10 @@ vyCG_mps = VehicleState(2);
 dPsi_radps = VehicleState(3); 
 
 % calculate chassis velocities at wheel centers projected to the ground
-vx_fr = vxCG_mps + (dPsi_radps*tw_front_m*0.5);
-vx_fl = vxCG_mps - (dPsi_radps*tw_front_m*0.5);
-vx_rr = vxCG_mps + (dPsi_radps*tw_rear_m*0.5);
-vx_rl = vxCG_mps - (dPsi_radps*tw_rear_m*0.5);
+vx_fr = vxCG_mps;% + (dPsi_radps*tw_front_m*0.5);
+vx_fl = vxCG_mps;% - (dPsi_radps*tw_front_m*0.5);
+vx_rr = vxCG_mps;% + (dPsi_radps*tw_rear_m*0.5);
+vx_rl = vxCG_mps;% - (dPsi_radps*tw_rear_m*0.5);
 vy_fr = vyCG_mps + (dPsi_radps*l_front_m);
 vy_fl = vyCG_mps + (dPsi_radps*l_front_m);
 vy_rr = vyCG_mps - (dPsi_radps*l_rear_m);
