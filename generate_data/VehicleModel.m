@@ -41,13 +41,15 @@ omega_rad = States(4:7);
 % alpha_rad = States(12:15); 
 
 % powertrain bias front rear
-FxPT_N = DriveForce_act_N; 
+FxPT_N = zeros(4, 1); 
+FxPT_N(1:2) = sum(DriveForce_act_N(1:2)); 
+FxPT_N(3:4) = sum(DriveForce_act_N(3:4)); 
 
 % wheel inertia factor matrix 
-wheelInertia_factors = [tyreradius_front_m/WheelInertia_Front_kgm2;...
-  tyreradius_front_m/WheelInertia_Front_kgm2;...
-  tyreradius_rear_m/WheelInertia_Rear_kgm2;...
-  tyreradius_rear_m/WheelInertia_Rear_kgm2];
+wheelInertia_factors = [tyreradius_front_m/(2*WheelInertia_Front_kgm2);...
+  tyreradius_front_m/(2*WheelInertia_Front_kgm2);...
+  tyreradius_rear_m/(2*WheelInertia_Rear_kgm2);...
+  tyreradius_rear_m/(2*WheelInertia_Rear_kgm2)];
 
 %% calculate friction, aero and tire forces 
 FxFriction = cF*vx_mps + 0.5*cD*roh*A_ref*vx_mps^2;
@@ -59,13 +61,17 @@ Fz_N = [ones(2, 1).*((m*9.81+extForces_N(3))*l_rear_m/(l_rear_m+l_front_m)/2 + 0
   DeltaWheel_rad, tw_front_m, tw_rear_m, l_front_m, l_rear_m, tyreradius_front_m, tyreradius_rear_m);
 
 [Fx_N, Fy_N] = TireModel(lambda_perc, alpha_rad, Fz_N, PacFrontLat, PacRearLat, PacFrontLong, PacRearLong);
+Fx_N(1:2) = sum(Fx_N(1:2));
+Fx_N(3:4) = sum(Fx_N(3:4));
+Fy_N(1:2) = sum(Fy_N(1:2));
+Fy_N(3:4) = sum(Fy_N(3:4));
 
 %% calculate single track model 
 % calculate equivalent single track accelerations
-FxF_N = sum(Fx_N(1:2)); 
-FxR_N = sum(Fx_N(3:4)); 
-FyF_N = sum(Fy_N(1:2)); 
-FyR_N = sum(Fy_N(3:4)); 
+FxF_N = (Fx_N(1)); 
+FxR_N = (Fx_N(3)); 
+FyF_N = (Fy_N(1)); 
+FyR_N = (Fy_N(3)); 
 % calculate accelerations
 ax_stm = (FxF_N*cos(DeltaWheel_rad) - FyF_N*sin(DeltaWheel_rad) + FxR_N - FxFriction + extForces_N(1))/m;
 ay_stm = (FyF_N*cos(DeltaWheel_rad) + FxF_N*sin(DeltaWheel_rad) + FyR_N + extForces_N(2))/m; 
