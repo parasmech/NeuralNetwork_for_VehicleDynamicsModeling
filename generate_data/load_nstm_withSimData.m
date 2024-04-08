@@ -2,7 +2,7 @@ clear
 close all
 clc
 
-filename = "./../inputs/trainingdata/data_to_run";
+filename = "./../inputs/trainingdata/data_to_train_13";
 % data_to_run.csv
 % data_to_train_0.csv
 % data_to_train_1.csv
