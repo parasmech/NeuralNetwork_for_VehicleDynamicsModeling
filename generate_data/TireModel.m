@@ -6,6 +6,8 @@ function [FxT_N, FyT_N] = TireModel(lambda_perc, alpha_rad, Fz_N, PacFrontLat, P
   % initialize
   FxT_N = zeros(4, 1); 
   FyT_N = zeros(4, 1); 
+
+  %% Good comment
   
   FxT_N(1:2) = PacModel(lambda_perc(1:2)./100, PacFrontLong, Fz_N(1:2)); 
   FxT_N(3:4) = PacModel(lambda_perc(3:4)./100, PacRearLong, Fz_N(3:4));  
