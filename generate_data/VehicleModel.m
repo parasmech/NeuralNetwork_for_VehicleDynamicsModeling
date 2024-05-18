@@ -1,4 +1,4 @@
-function [lambda_perc,alpha_rad, ExactMeasurements, NextStates] = VehicleModel(DeltaWheel_rad, DriveForce_act_N, extForces_N, extTorques_Nm, States, vp)
+function [lambda_perc,alpha_rad, ExactMeasurements, NextStates] = VehicleModel(DeltaWheel_rad, DriveForce_act_N, extForces_N, extTorques_Nm, States, vp, sample_Ti)
 
 % differential equations for the nonlinear single track model
 
@@ -94,7 +94,6 @@ dalpha_rad = dalpha_rad_stm * w_stm;
 dlambda_perc = dlambda_perc_stm * w_stm; 
 ax = ax_stm * w_stm; 
 ay = ay_stm * w_stm; 
-sample_Ti = 1.e-3;                                              % Time Step
 
 % write derivatives to output
 ExactMeasurements = [vx_mps;vy_mps;dPsi_rad;ax;ay;omega_rad;]; %;lambda_perc;alpha_rad
