@@ -2,7 +2,7 @@ clear
 close all
 clc
 
-filename = "./../inputs/trainingdata/data_to_train_13";
+filename = "./../inputs/trainingdata/data_to_run";
 % data_to_run.csv
 % data_to_train_0.csv
 % data_to_train_1.csv
@@ -23,22 +23,23 @@ data = readtable(filename + ".csv");
 run('VehParams.m');
 
 
-sample_Ti = 8.e-3;                                              % Time Step
-tiSer = 0 : sample_Ti : (length(data.vx_mps)-1)*sample_Ti;      % Time Series
+sample_Ti = 1.e-3;                                              % Time Step
+tiSer = 0 : sample_Ti : (length(data.vx_mps)-1)*0.008;      % Time Series
 tend = tiSer(end);                                              % Stop Time
+tiearly = 0 : 0.008 : (length(data.vx_mps)-1)*0.008;      % Time Series
 
-vx_mps_TiSer = timeseries(data.vx_mps, tiSer);                  % Speed vx Data
-vy_mps_TiSer = timeseries(data.vy_mps, tiSer);                  % Speed vy Data
-dpsi_radps_TiSer = timeseries(data.dpsi_radps, tiSer);          % Speed yaw rate Data
-ax_mps_TiSer = timeseries(data.ax_mps2, tiSer);                 % Acceleration ax Data
-ay_mps_TiSer = timeseries(data.ay_mps2, tiSer);                 % Acceleration ay Data
-DeltaWheel_rad_TiSer = timeseries(data.deltawheel_rad, tiSer);  % Steering Wheel angle Data
-TwheelRL_Nm_TiSer = timeseries(data.TwheelRL_Nm, tiSer);        % Torque Rear Left Data
-TwheelRR_Nm_TiSer = timeseries(data.TwheelRR_Nm, tiSer);        % Torque Rear Right Data
-TwheelFL_Nm_TiSer = timeseries(data.TwheelRL_Nm*0, tiSer);      % Torque Front Left Data 
-TwheelFR_Nm_TiSer = timeseries(data.TwheelRR_Nm*0, tiSer);      % Torque Front Right Data
-pBrakeF_bar_TiSer = timeseries(data.pBrakeF_bar/2, tiSer);      % Brake pressure Front
-pBrakeR_bar_TiSer = timeseries(data.pBrakeR_bar/2, tiSer);      % Brake pressure Rear
+vx_mps_TiSer = timeseries(interp1(tiearly, data.vx_mps, tiSer), tiSer);                  % Speed vx Data
+vy_mps_TiSer = timeseries(interp1(tiearly, data.vy_mps, tiSer), tiSer);                  % Speed vy Data
+dpsi_radps_TiSer = timeseries(interp1(tiearly, data.dpsi_radps, tiSer), tiSer);          % Speed yaw rate Data
+ax_mps_TiSer = timeseries(interp1(tiearly, data.ax_mps2, tiSer), tiSer);                 % Acceleration ax Data
+ay_mps_TiSer = timeseries(interp1(tiearly, data.ay_mps2, tiSer), tiSer);                 % Acceleration ay Data
+DeltaWheel_rad_TiSer = timeseries(interp1(tiearly, data.deltawheel_rad, tiSer)', tiSer');  % Steering Wheel angle Data
+TwheelRL_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRL_Nm, tiSer)', tiSer');        % Torque Rear Left Data
+TwheelRR_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRR_Nm, tiSer)', tiSer');        % Torque Rear Right Data
+TwheelFL_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRL_Nm*0, tiSer)', tiSer');      % Torque Front Left Data 
+TwheelFR_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRR_Nm*0, tiSer)', tiSer');      % Torque Front Right Data
+pBrakeF_bar_TiSer = timeseries(interp1(tiearly, data.pBrakeF_bar/2, tiSer)', tiSer');      % Brake pressure Front
+pBrakeR_bar_TiSer = timeseries(interp1(tiearly, data.pBrakeR_bar/2, tiSer)', tiSer');      % Brake pressure Rear
 vx_INIT = data.vx_mps(1);
 vy_INIT = data.vy_mps(1);
 dpsi_rad_INIT = data.dpsi_radps(1);
