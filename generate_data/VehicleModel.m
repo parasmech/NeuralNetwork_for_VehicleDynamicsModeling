@@ -102,4 +102,4 @@ vy_next = vy_mps + dvy*sample_Ti;
 dpsi_next = dPsi_rad + ddPsi*sample_Ti;
 omega_next = omega_rad + domega_rad*sample_Ti;
 
-NextStates = [vx_next;vy_next;dpsi_next;omega_next;lambda_perc;alpha_rad;];
+NextStates = [vx_next;vy_next;dpsi_next;omega_next; lambda_perc; alpha_rad];

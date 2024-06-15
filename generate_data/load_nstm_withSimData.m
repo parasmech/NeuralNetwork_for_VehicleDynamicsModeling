@@ -2,6 +2,7 @@ clear
 close all
 clc
 
+%% load Input Data
 filename = "./../inputs/trainingdata/data_to_run";
 % data_to_run.csv
 % data_to_train_0.csv
@@ -22,11 +23,11 @@ filename = "./../inputs/trainingdata/data_to_run";
 data = readtable(filename + ".csv");
 run('VehParams.m');
 
-
 sample_Ti = 1.e-3;                                              % Time Step
-tiSer = 0 : sample_Ti : (length(data.vx_mps)-1)*0.008;      % Time Series
-tend = tiSer(end);                                              % Stop Time
-tiearly = 0 : 0.008 : (length(data.vx_mps)-1)*0.008;      % Time Series
+tend = (length(data.vx_mps)-1)*0.008;
+
+tiSer = 0 : sample_Ti : tend;      % Time Series
+tiearly = 0 : 0.008 : tend;      % Time Series
 
 vx_mps_TiSer = timeseries(interp1(tiearly, data.vx_mps, tiSer), tiSer);                  % Speed vx Data
 vy_mps_TiSer = timeseries(interp1(tiearly, data.vy_mps, tiSer), tiSer);                  % Speed vy Data
@@ -46,6 +47,10 @@ dpsi_rad_INIT = data.dpsi_radps(1);
 omega_rad_INIT = data.vx_mps(1)/tireFL__MFSIMPLE__r_tire_m;
 [lambda_perc_INIT, alpha_rad_INIT] = calcWheelSlips(ones(4,1)*omega_rad_INIT, [vx_INIT; vy_INIT; dpsi_rad_INIT],...
   data.deltawheel_rad(1), VEH__VehicleData__w_TrackF_m, VEH__VehicleData__w_TrackR_m, VEH__VehicleData__l_WheelbaseF_m, VEH__VehicleData__l_WheelbaseTotal_m - VEH__VehicleData__l_WheelbaseF_m, tireFL__MFSIMPLE__r_tire_m, tireFL__MFSIMPLE__r_tire_m);
+
+%% load PINN result
+run('load_PINN_results.m')
+
 %%
 out = sim('VehDyn_nstm_model.slx');
 %%
@@ -54,6 +59,10 @@ vy_mps = out.SimRealState.vy_mps.Data;
 dpsi_radps = out.SimRealState.dPsi_radps.Data; 
 ax_mps2 = out.SimRealState.ax_mps2.Data; 
 ay_mps2 = out.SimRealState.ay_mps2.Data; 
+lambdaF = out.SimRealState.lambdaF.Data;
+lambdaR = out.SimRealState.lambdaR.Data;
+alpharadF = out.SimRealState.alpha_radF.Data;
+alpharadR = out.SimRealState.alpha_radR.Data;
 deltawheel_rad = DeltaWheel_rad_TiSer.Data; 
 TwheelRL_Nm = TwheelRL_Nm_TiSer.Data; 
 TwheelRR_Nm = TwheelRR_Nm_TiSer.Data;
@@ -61,5 +70,5 @@ pBrakeF_bar = pBrakeF_bar_TiSer.Data;
 pBrakeR_bar = pBrakeR_bar_TiSer.Data;
 ax_mps2(1) = data.ax_mps2(1); % correct at first time step due to numerical intergation ODE4
 ay_mps2(1) = data.ay_mps2(1);
-VehDynData_Table = table(vx_mps, vy_mps, dpsi_radps, ax_mps2, ay_mps2, deltawheel_rad, TwheelRL_Nm, TwheelRR_Nm, pBrakeF_bar, pBrakeR_bar);
+VehDynData_Table = table(vx_mps, vy_mps, dpsi_radps, ax_mps2, ay_mps2, deltawheel_rad, TwheelRL_Nm, TwheelRR_Nm, pBrakeF_bar, pBrakeR_bar, lambdaF , lambdaR , alpharadF, alpharadR);
 writetable(VehDynData_Table, sprintf(filename + '.csv' ));

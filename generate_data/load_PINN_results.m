@@ -1,0 +1,31 @@
+filename_AI_res = "./PINN_results/";
+
+data_0 = readtable(filename_AI_res + 'layer21_activations_0' + ".csv");
+data_1 = readtable(filename_AI_res + 'layer21_activations_1' + ".csv");
+data_2 = readtable(filename_AI_res + 'layer21_activations_2' + ".csv");
+data_3 = readtable(filename_AI_res + 'layer21_activations_3' + ".csv");
+data_4 = readtable(filename_AI_res + 'layer21_activations_4' + ".csv");
+data_5 = readtable(filename_AI_res + 'layer21_activations_5' + ".csv");
+data_6 = readtable(filename_AI_res + 'layer21_activations_6' + ".csv");
+data_7 = readtable(filename_AI_res + 'layer21_activations_7' + ".csv");
+data_8 = readtable(filename_AI_res + 'layer21_activations_8' + ".csv");
+data_9 = readtable(filename_AI_res + 'layer21_activations_9' + ".csv");
+data_PINN = [data_0;data_1;data_2;data_3;data_4;data_5;data_6;data_7;data_8;data_9];
+tiPINN = 0 : sample_Ti : (length(data_PINN.Var1)-1)*0.001;      % Time Series
+
+long_slip_front = timeseries(data_PINN.Var1 , tiPINN); 
+long_slip_rear = timeseries(data_PINN.Var2 , tiPINN); 
+lat_slip_front = timeseries(data_PINN.Var3 , tiPINN); 
+lat_slip_rear = timeseries(data_PINN.Var4 , tiPINN); 
+B_long = timeseries(data_PINN.Var5 , tiPINN); 
+C_long = timeseries(data_PINN.Var6 , tiPINN); 
+D_long = timeseries(data_PINN.Var7 , tiPINN); 
+E_long = timeseries(data_PINN.Var8 , tiPINN); 
+F_long = timeseries(data_PINN.Var9 , tiPINN); 
+eps_long = timeseries(data_PINN.Var10 , tiPINN); 
+B_lat = timeseries(data_PINN.Var11 , tiPINN); 
+C_lat = timeseries(data_PINN.Var12 , tiPINN); 
+D_lat = timeseries(data_PINN.Var13 , tiPINN); 
+E_lat = timeseries(data_PINN.Var14 , tiPINN); 
+F_lat = timeseries(data_PINN.Var15 , tiPINN); 
+eps_lat = timeseries(data_PINN.Var16 , tiPINN); 
