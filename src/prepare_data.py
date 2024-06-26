@@ -8,6 +8,17 @@ from joblib import dump, load
 Created by: Rainer Trauth
 Created on: 01.04.2020
 """
+def extract_partial_scaler(scaler, num_vars):
+    """Extracts a partial scaler for the first `num_vars` variables from the original scaler."""
+    new_scaler = StandardScaler()
+    new_scaler.mean_ = scaler.mean_[:num_vars]
+    new_scaler.scale_ = scaler.scale_[:num_vars]
+    new_scaler.var_ = scaler.var_[:num_vars]
+    new_scaler.n_features_in_ = num_vars
+    new_scaler.n_samples_seen_ = scaler.n_samples_seen_
+    if hasattr(scaler, 'feature_names_in_'):
+        new_scaler.feature_names_in_ = scaler.feature_names_in_[:num_vars]
+    return new_scaler
 
 
 def scaler(path_dict: dict,
@@ -71,7 +82,9 @@ def scaler(path_dict: dict,
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def scaler_run(path2scaler: str,
+def scaler_run(
+               path_dict: dict,
+               path2scaler: str,
                params_dict: dict,
                dataset: np.array):
     """Scales dataset for runing NN test.
@@ -88,7 +101,7 @@ def scaler_run(path2scaler: str,
 
     if params_dict['General']['scaler_mode'] == 2:
 
-        with open('outputs/scaler_tanh', 'rb') as f:
+        with open(os.path.join(path_dict['path2inputs_trainedmodels'], 'scaler_tanh'), 'rb') as f:
             m, std = pickle.load(f)
             dataset_out = 0.5 * (np.tanh(0.01 * ((dataset - m) / std)) + 1)
 
@@ -101,7 +114,8 @@ def scaler_run(path2scaler: str,
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def scaler_reverse(path2scaler: str,
+def scaler_reverse(path_dict: dict,
+                   path2scaler: str,
                    params_dict: dict,
                    dataset: np.array) -> np.array:
     """Rescaled dataset to physical quantities.
@@ -120,13 +134,50 @@ def scaler_reverse(path2scaler: str,
 
     if params_dict['General']['scaler_mode'] == 2:
 
-        with open('outputs/scaler_tanh', 'rb') as f:
+        with open(os.path.join(path_dict['path2inputs_trainedmodels'], 'scaler_tanh'), 'rb') as f:
             m, std = pickle.load(f)
             dataset_std_rev = m + 100 * std * np.arctanh(2 * dataset - 1)
 
     else:
         scalers = load(path2scaler)
+        #partial_scaler = extract_partial_scaler(scalers, 3)
         dataset_std_rev = scalers.inverse_transform(dataset)
+
+    return dataset_std_rev
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+def scaler_reverse_new(path_dict: dict,
+                   path2scaler: str,
+                   params_dict: dict,
+                   dataset: np.array) -> np.array:
+    """Rescaled dataset to physical quantities.
+
+    :param path_dict:           dictionary which contains paths to all relevant folders and files of this module
+    :type path_dict: dict
+    :param params_dict:         dictionary which contains all parameters necessary to run this module
+    :type params_dict: dict
+    :param dataset:             dataset which should get rescaled
+    :type dataset: np.array
+    :return:                    rescaled dataset
+    :rtype: np.array
+    """
+
+    print('TRANSFORM RESULT WITH SCALER TO PHYSICAL QUANTITIES')
+
+    if params_dict['General']['scaler_mode'] == 2:
+
+        with open(os.path.join(path_dict['path2inputs_trainedmodels'], 'scaler_tanh'), 'rb') as f:
+            m, std = pickle.load(f)
+            dataset_std_rev = m + 100 * std * np.arctanh(2 * dataset - 1)
+
+    else:
+        scalers = load(path2scaler)
+        partial_scaler = extract_partial_scaler(scalers, 3)
+        dataset_std_rev = partial_scaler.inverse_transform(dataset)
 
     return dataset_std_rev
 
@@ -170,15 +221,19 @@ def create_dataset_separation_run(data_test: np.array,
         initials = np.reshape(initials, (1, input_timesteps, input_shape))
 
     # get vehicle input data of test data file
-    steeringangle_rad = data_test[start + input_timesteps:start + duration, output_shape]
+    acc_x = data_test[start + input_timesteps:start + duration, output_shape]
+    acc_y = data_test[start + input_timesteps:start + duration, output_shape+1]
+    steeringangle_rad = data_test[start + input_timesteps:start + duration, output_shape+2]
 
-    torqueRL_Nm = data_test[start + input_timesteps:start + duration, output_shape + 1]
-    torqueRR_Nm = data_test[start + input_timesteps:start + duration, output_shape + 2]
+    torqueRL_Nm = data_test[start + input_timesteps:start + duration, output_shape + 3]
+    torqueRR_Nm = data_test[start + input_timesteps:start + duration, output_shape + 4]
 
-    brakepresF_bar = data_test[start + input_timesteps:start + duration, output_shape + 3]
-    brakepresR_bar = data_test[start + input_timesteps:start + duration, output_shape + 4]
+    brakepresF_bar = data_test[start + input_timesteps:start + duration, output_shape + 5]
+    brakepresR_bar = data_test[start + input_timesteps:start + duration, output_shape + 6]
 
-    return initials, steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar
+    wf = data_test[start + input_timesteps:start + duration, output_shape + 7]
+    wr = data_test[start + input_timesteps:start + duration, output_shape + 8]
+    return initials, acc_x, acc_y, steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar,wf,wr
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -241,22 +296,28 @@ def create_dataset_separation(path_dict: dict,
     lengthsum = 0
     lengthsumtwo = 0
     lengthsumtwolabels = 0
+    lengthsumslips = 0
 
     for m in range(0, file_counting):
         lengthsum += (len(data[m]) - input_timesteps)
 
     data_train = np.zeros((lengthsum * input_timesteps, input_shape))
     data_labels = np.zeros((lengthsum, output_shape))
+    slips_true = np.zeros((lengthsum, 4))
 
     # generate the training dataset which contains 'input_timesteps' number of previous data points
     for u in range(0, file_counting):
         data_labels[lengthsumtwolabels:lengthsumtwolabels + len(data[u]) - input_timesteps] \
             = (data[u])[input_timesteps:, 0:output_shape]
 
+        slips_true[lengthsumslips:lengthsumslips + len(data[u]) - input_timesteps] \
+            = (data[u])[input_timesteps-1:-1, -4:]
+
         for pp in range(0, len(data[u]) - input_timesteps):
             idx = lengthsumtwo + pp * input_timesteps
-            data_train[idx:idx + input_timesteps, :] = (data[u])[pp:pp + input_timesteps, :]
+            data_train[idx:idx + input_timesteps, :] = (data[u])[pp:pp + input_timesteps, 0:input_shape]
 
+        lengthsumslips += ((len(data[u]) - input_timesteps))
         lengthsumtwolabels += ((len(data[u]) - input_timesteps))
         lengthsumtwo += ((len(data[u]) - input_timesteps) * input_timesteps)
 
@@ -276,6 +337,7 @@ def create_dataset_separation(path_dict: dict,
     else:
         np.random.shuffle(indices)
 
+    slips_true = slips_true[indices]
     data_labels = data_labels[indices]
     data_train = np.reshape(data_train[indices], (len(data_labels) * input_timesteps, input_shape))
 
@@ -291,7 +353,8 @@ def create_dataset_separation(path_dict: dict,
     temp = np.zeros((len(data_labels), input_shape))
     temp[:, 0:output_shape] = data_labels
 
-    temp = scaler_run(path2scaler=path_dict['filepath2scaler_save'],
+    temp = scaler_run(path_dict=path_dict,
+                      path2scaler=path_dict['filepath2scaler_save'],
                       params_dict=params_dict,
                       dataset=temp)
 
@@ -305,10 +368,11 @@ def create_dataset_separation(path_dict: dict,
         train_x = np.reshape(train_x, (p // input_timesteps, input_timesteps, input_shape))
 
     train_y = data_labels[0:(p // input_timesteps), :]
-
+    slips_train = slips_true[0:(p // input_timesteps), :]
     # prepare validation data
     val_x = data_train[p:len(data_train), :]
-    val_x = scaler_run(path2scaler=path_dict['filepath2scaler_save'],
+    val_x = scaler_run(path_dict=path_dict,
+                       path2scaler=path_dict['filepath2scaler_save'],
                        params_dict=params_dict,
                        dataset=val_x)
 
@@ -319,5 +383,10 @@ def create_dataset_separation(path_dict: dict,
         val_x = np.reshape(val_x, ((len(data_train) - p) // input_timesteps, input_timesteps, input_shape))
 
     val_y = data_labels[(p // input_timesteps):len(data_labels), :]
+    slips_val = slips_true[(p // input_timesteps):, :]
+
+    # concatenate slips_true to train_y and val_y
+    train_y = np.concatenate((train_y, slips_train), axis=1)
+    val_y = np.concatenate((val_y, slips_val), axis=1)
 
     return (train_x, train_y), (val_x, val_y)
