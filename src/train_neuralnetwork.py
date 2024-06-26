@@ -86,7 +86,7 @@ def train_neuralnetwork(path_dict: dict,
     model = src.neural_network_fcn.create_nnmodel(path_dict=path_dict,
                                                   params_dict=params_dict,
                                                   nn_mode=nn_mode)
-
+    print_slip_callback = src.neural_network_fcn.PrintSlipCoefficients(layer_name='lambda_1')
     history_mod = model.fit(x=train_data[0],
                             y=train_data[1],
                             batch_size=params_dict['NeuralNetwork_Settings']['batch_size'],
@@ -94,10 +94,11 @@ def train_neuralnetwork(path_dict: dict,
                             epochs=params_dict['NeuralNetwork_Settings']['epochs'],
                             verbose=1,
                             shuffle=True,
-                            callbacks=[reduce_lr_loss, es, mc, Nan],
+                            callbacks=[reduce_lr_loss, es, mc, Nan,print_slip_callback],
                             use_multiprocessing=True)
 
     print(history_mod.history.keys())
+    print(print_slip_callback)
 
     if params_dict['General']['plot_mse']:
         print('PLOT MSE CURVE')
