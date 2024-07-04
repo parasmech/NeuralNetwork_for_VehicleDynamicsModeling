@@ -1,4 +1,4 @@
-function [lambda_perc,alpha_rad, ExactMeasurements, NextStates] = VehicleModel(DeltaWheel_rad, DriveForce_act_N, extForces_N, extTorques_Nm, States, vp, sample_Ti)
+function [lambda_perc,alpha_rad, ExactMeasurements, NextStates] = VehicleModel(DeltaWheel_rad, DriveForce_act_N, extForces_N, extTorques_Nm, States, vp, sample_Ti, longslip_front, longslip_rear, latslip_front, latslip_rear)
 
 % differential equations for the nonlinear single track model
 
@@ -59,8 +59,14 @@ Fz_N = [ones(2, 1).*((m*9.81+extForces_N(3))*l_rear_m/(l_rear_m+l_front_m)/2 + 0
 % calculate slip updates
 [lambda_perc, alpha_rad] = calcWheelSlips(omega_rad, [vx_mps; vy_mps; dPsi_rad],...
   DeltaWheel_rad, tw_front_m, tw_rear_m, l_front_m, l_rear_m, tyreradius_front_m, tyreradius_rear_m);
+lambda_perc1 = zeros(4,1);
+alpha_rad1 = zeros(4,1);
 
+lambda_perc1 = [longslip_front; longslip_front; longslip_rear; longslip_rear];
+alpha_rad1 = [latslip_front; latslip_front; latslip_rear; latslip_rear];
 [Fx_N, Fy_N] = TireModel(lambda_perc, alpha_rad, Fz_N, PacFrontLat, PacRearLat, PacFrontLong, PacRearLong);
+[Fx_N1, Fy_N1] = TireModel(lambda_perc1, alpha_rad1, Fz_N, PacFrontLat, PacRearLat, PacFrontLong, PacRearLong);
+
 Fx_N(1:2) = sum(Fx_N(1:2));
 Fx_N(3:4) = sum(Fx_N(3:4));
 Fy_N(1:2) = sum(Fy_N(1:2));
