@@ -54,23 +54,23 @@ run('load_PINN_results.m')
 %%
 out = sim('VehDyn_nstm_model.slx');
 %%
-vx_mps = out.SimRealState.vx_mps.Data;
-vy_mps = out.SimRealState.vy_mps.Data; 
-dpsi_radps = out.SimRealState.dPsi_radps.Data; 
-ax_mps2 = out.SimRealState.ax_mps2.Data; 
-ay_mps2 = out.SimRealState.ay_mps2.Data; 
-omega_rad_F = out.omega_rad_F.Data;
-omega_rad_R = out.omega_rad_R.Data;
-lambdaF = out.SimRealState.lambdaF.Data;
-lambdaR = out.SimRealState.lambdaR.Data;
-alpharadF = out.SimRealState.alpha_radF.Data;
-alpharadR = out.SimRealState.alpha_radR.Data;
-deltawheel_rad = DeltaWheel_rad_TiSer.Data; 
-TwheelRL_Nm = TwheelRL_Nm_TiSer.Data; 
-TwheelRR_Nm = TwheelRR_Nm_TiSer.Data;
-pBrakeF_bar = pBrakeF_bar_TiSer.Data; 
-pBrakeR_bar = pBrakeR_bar_TiSer.Data;
-ax_mps2(1) = data.ax_mps2(1); % correct at first time step due to numerical intergation ODE4
-ay_mps2(1) = data.ay_mps2(1);
-VehDynData_Table = table(vx_mps, vy_mps, dpsi_radps, ax_mps2, ay_mps2, deltawheel_rad, TwheelRL_Nm, TwheelRR_Nm, pBrakeF_bar, pBrakeR_bar, omega_rad_F, omega_rad_R, lambdaF , lambdaR , alpharadF, alpharadR);
-writetable(VehDynData_Table, sprintf(filename + '.csv' ));
+% vx_mps = out.SimRealState.vx_mps.Data;
+% vy_mps = out.SimRealState.vy_mps.Data; 
+% dpsi_radps = out.SimRealState.dPsi_radps.Data; 
+% ax_mps2 = out.SimRealState.ax_mps2.Data; 
+% ay_mps2 = out.SimRealState.ay_mps2.Data; 
+% omega_rad_F = out.omega_rad_F.Data;
+% omega_rad_R = out.omega_rad_R.Data;
+% lambdaF = out.SimRealState.lambdaF.Data;
+% lambdaR = out.SimRealState.lambdaR.Data;
+% alpharadF = out.SimRealState.alpha_radF.Data;
+% alpharadR = out.SimRealState.alpha_radR.Data;
+% deltawheel_rad = DeltaWheel_rad_TiSer.Data; 
+% TwheelRL_Nm = TwheelRL_Nm_TiSer.Data; 
+% TwheelRR_Nm = TwheelRR_Nm_TiSer.Data;
+% pBrakeF_bar = pBrakeF_bar_TiSer.Data; 
+% pBrakeR_bar = pBrakeR_bar_TiSer.Data;
+% ax_mps2(1) = data.ax_mps2(1); % correct at first time step due to numerical intergation ODE4
+% ay_mps2(1) = data.ay_mps2(1);
+% VehDynData_Table = table(vx_mps, vy_mps, dpsi_radps, ax_mps2, ay_mps2, deltawheel_rad, TwheelRL_Nm, TwheelRR_Nm, pBrakeF_bar, pBrakeR_bar, omega_rad_F, omega_rad_R, lambdaF , lambdaR , alpharadF, alpharadR);
+% writetable(VehDynData_Table, sprintf(filename + '.csv' ));
