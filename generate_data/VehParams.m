@@ -3589,80 +3589,112 @@ tireFL__LONGVL = 11;
 tireFL__MFSIMPLE__Iyy_Wheel_kgm2 = 1.35;
 
 
+% % 
+% tireFL__MFSIMPLE__PacLat_B = 11.2; %10;
+% 
+% tireFL__MFSIMPLE__PacLat_C = 1.47; %1.603;
+% 
+% tireFL__MFSIMPLE__PacLat_D = 1.59; %1.654;
+% 
+% tireFL__MFSIMPLE__PacLat_E = 0.683; %1;
+% 
+% tireFL__MFSIMPLE__PacLat_Fznom = 3790; %3114;
+% 
+% tireFL__MFSIMPLE__PacLat_eps_load = -0.216; %-0.1783;
+% 
+% tireFL__MFSIMPLE__PacLong_B = 23.4; %18;
+% 
+% tireFL__MFSIMPLE__PacLong_C = 1.47; %;
+% 
+% tireFL__MFSIMPLE__PacLong_D = 1.78; %1.7168;
+% 
+% tireFL__MFSIMPLE__PacLong_E = 0.47; %1;
+% 
+% tireFL__MFSIMPLE__PacLong_Fznom = 3650; %3114;
+% 
+% tireFL__MFSIMPLE__PacLong_eps_load = -0.352; %-0.289;
 
-% tireFL__MFSIMPLE__PacLat_B = 5.22E+00; %10;
+
 % 
-% tireFL__MFSIMPLE__PacLat_C = 5.20E-01; %1.603;
-% 
-% tireFL__MFSIMPLE__PacLat_D = 1.04E-01; %1.654;
-% 
-% tireFL__MFSIMPLE__PacLat_E = 4.19E-01; %1;
-% 
-% tireFL__MFSIMPLE__PacLat_Fznom = 1.01E+03; %3114;
-% 
-% tireFL__MFSIMPLE__PacLat_eps_load = -4.52E-01; %-0.1783;
-% 
-% tireFL__MFSIMPLE__PacLong_B = 2.83E+01; %18;
-% 
-% tireFL__MFSIMPLE__PacLong_C = 1.74E+00; %2;
-% 
-% tireFL__MFSIMPLE__PacLong_D = 3.58E-01; %1.7168;
-% 
-% tireFL__MFSIMPLE__PacLong_E = 7.01E-01; %1;
-% 
-% tireFL__MFSIMPLE__PacLong_Fznom = 1.83E+03; %3114;
-% 
-% tireFL__MFSIMPLE__PacLong_eps_load = 4.80E-01; %-0.289;
+tireFL__MFSIMPLE__PacLat_B = 10;
+
+tireFL__MFSIMPLE__PacLat_C = 1.603;
+
+tireFL__MFSIMPLE__PacLat_D =1.654;
+
+tireFL__MFSIMPLE__PacLat_E = 1;
+
+tireFL__MFSIMPLE__PacLat_Fznom = 3114;
+
+tireFL__MFSIMPLE__PacLat_eps_load = -0.1783;
+
+tireFL__MFSIMPLE__PacLong_B = 18;
+
+tireFL__MFSIMPLE__PacLong_C = 2;
+
+tireFL__MFSIMPLE__PacLong_D = 1.7168;
+
+tireFL__MFSIMPLE__PacLong_E = 1;
+
+tireFL__MFSIMPLE__PacLong_Fznom = 3114;
+
+tireFL__MFSIMPLE__PacLong_eps_load = -0.289;
 
 
-
-% tireFL__MFSIMPLE__PacLat_B = 10;
+% tireFL__MFSIMPLE__PacLong_B = 1.96E+01;
 % 
-% tireFL__MFSIMPLE__PacLat_C = 1.603;
+% tireFL__MFSIMPLE__PacLong_C = 2.33E+00;
 % 
-% tireFL__MFSIMPLE__PacLat_D =1.654;
+% tireFL__MFSIMPLE__PacLong_D =1.53E+00;
 % 
-% tireFL__MFSIMPLE__PacLat_E = 1;
+% tireFL__MFSIMPLE__PacLong_E = 1.14E+00;
 % 
-% tireFL__MFSIMPLE__PacLat_Fznom = 3114;
+% tireFL__MFSIMPLE__PacLong_Fznom = 2.57E+03;
 % 
-% tireFL__MFSIMPLE__PacLat_eps_load = -0.1783;
+% tireFL__MFSIMPLE__PacLong_eps_load = -3.86E-01;
 % 
-% tireFL__MFSIMPLE__PacLong_B = 18;
+% tireFL__MFSIMPLE__PacLat_B = 9.02E+00;
 % 
-% tireFL__MFSIMPLE__PacLong_C = 2;
+% tireFL__MFSIMPLE__PacLat_C = 1.50E+00;
 % 
-% tireFL__MFSIMPLE__PacLong_D = 1.7168;
+% tireFL__MFSIMPLE__PacLat_D = 1.50E+00;
 % 
-% tireFL__MFSIMPLE__PacLong_E = 1;
+% tireFL__MFSIMPLE__PacLat_E =1.08E+00;
 % 
-% tireFL__MFSIMPLE__PacLong_Fznom = 3114;
+% tireFL__MFSIMPLE__PacLat_Fznom = 3.37E+03;
 % 
-% tireFL__MFSIMPLE__PacLong_eps_load = -0.289;
+% tireFL__MFSIMPLE__PacLat_eps_load = -1.02E-01;
 
-tireFL__MFSIMPLE__PacLat_B = 5.22E+00;
+% 1.71E+01	1.23E+00	7.63E-01	-4.45E-01	2.62E+03	-5.68E-01	5.23E+00	5.24E-01	1.06E-01	-1.98E-01	1.01E+03	-4.36E-01
+% 2.83E+01	1.74E+00	3.58E-01	7.01E-01	1.83E+03	-4.80E-01	5.22E+00	5.20E-01	1.04E-01	4.19E-01	1.01E+03	-4.52E-01
+% -7.94E-04	2.63E-02	-2.50E-03	-2.79E-03	2.78E+01	1.64E+00	1.34E+00	7.43E-01	3.70E+03	-8.51E-01	2.97E+01	9.49E-01	1.53E+00	6.50E-01	3.32E+03	-2.39E-01
+% 2.47E+01	1.58E+00	1.52E+00	-7.47E-02	3.74E+03	-3.89E-01	1.54E+01	7.42E-01	1.69E+00	-1.98E+00	4.28E+03	-3.88E-01
+% 1.96E+01	2.33E+00	1.53E+00	1.14E+00	2.57E+03	-3.86E-01	9.02E+00	1.50E+00	1.50E+00	1.08E+00	3.37E+03	-1.02E-01
 
-tireFL__MFSIMPLE__PacLat_C = 5.20E-01;
 
-tireFL__MFSIMPLE__PacLat_D =1.04E-01;
-
-tireFL__MFSIMPLE__PacLat_E = 4.19E-01;
-
-tireFL__MFSIMPLE__PacLat_Fznom = 1.01E+03;
-
-tireFL__MFSIMPLE__PacLat_eps_load = -4.52E-01;
-
-tireFL__MFSIMPLE__PacLong_B = 2.83E+01;
-
-tireFL__MFSIMPLE__PacLong_C = 1.74E+00;
-
-tireFL__MFSIMPLE__PacLong_D = 3.58E-01;
-
-tireFL__MFSIMPLE__PacLong_E = 7.01E-01;
-
-tireFL__MFSIMPLE__PacLong_Fznom = 1.83E+03;
-
-tireFL__MFSIMPLE__PacLong_eps_load = -4.80E-01;
+% tireFL__MFSIMPLE__PacLat_B = 5.22E+00;
+% 
+% tireFL__MFSIMPLE__PacLat_C = 5.20E-01;
+% 
+% tireFL__MFSIMPLE__PacLat_D =1.04E-01;
+% 
+% tireFL__MFSIMPLE__PacLat_E = 4.19E-01;
+% 
+% tireFL__MFSIMPLE__PacLat_Fznom = 1.01E+03;
+% 
+% tireFL__MFSIMPLE__PacLat_eps_load = -4.52E-01;
+% 
+% tireFL__MFSIMPLE__PacLong_B = 2.83E+01;
+% 
+% tireFL__MFSIMPLE__PacLong_C = 1.74E+00;
+% 
+% tireFL__MFSIMPLE__PacLong_D = 3.58E-01;
+% 
+% tireFL__MFSIMPLE__PacLong_E = 7.01E-01;
+% 
+% tireFL__MFSIMPLE__PacLong_Fznom = 1.83E+03;
+% 
+% tireFL__MFSIMPLE__PacLong_eps_load = -4.80E-01;
 
 
 

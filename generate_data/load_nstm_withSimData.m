@@ -29,11 +29,11 @@ tend = (length(data.vx_mps)-1)*0.008;
 tiSer = 0 : sample_Ti : tend;      % Time Series
 tiearly = 0 : 0.008 : tend;      % Time Series
 
-vx_mps_TiSer = timeseries(interp1(tiearly, data.vx_mps, tiSer), tiSer);                  % Speed vx Data
-vy_mps_TiSer = timeseries(interp1(tiearly, data.vy_mps, tiSer), tiSer);                  % Speed vy Data
-dpsi_radps_TiSer = timeseries(interp1(tiearly, data.dpsi_radps, tiSer), tiSer);          % Speed yaw rate Data
-ax_mps_TiSer = timeseries(interp1(tiearly, data.ax_mps2, tiSer), tiSer);                 % Acceleration ax Data
-ay_mps_TiSer = timeseries(interp1(tiearly, data.ay_mps2, tiSer), tiSer);                 % Acceleration ay Data
+vx_mps_TiSer = timeseries(interp1(tiearly, data.vx_mps, tiSer)', tiSer);                  % Speed vx Data
+vy_mps_TiSer = timeseries(interp1(tiearly, data.vy_mps, tiSer)', tiSer);                  % Speed vy Data
+dpsi_radps_TiSer = timeseries(interp1(tiearly, data.dpsi_radps, tiSer)', tiSer);          % Speed yaw rate Data
+ax_mps_TiSer = timeseries(interp1(tiearly, data.ax_mps2, tiSer)', tiSer);                 % Acceleration ax Data
+ay_mps_TiSer = timeseries(interp1(tiearly, data.ay_mps2, tiSer)', tiSer);                 % Acceleration ay Data
 DeltaWheel_rad_TiSer = timeseries(interp1(tiearly, data.deltawheel_rad, tiSer)', tiSer');  % Steering Wheel angle Data
 TwheelRL_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRL_Nm, tiSer)', tiSer');        % Torque Rear Left Data
 TwheelRR_Nm_TiSer = timeseries(interp1(tiearly, data.TwheelRR_Nm, tiSer)', tiSer');        % Torque Rear Right Data

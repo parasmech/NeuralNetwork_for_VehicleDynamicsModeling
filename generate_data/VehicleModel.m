@@ -104,10 +104,10 @@ F_N1 = [FxF_N1; FxR_N1; FyF_N1; FyR_N1];
 F_N = [FxF_N; FxR_N; FyF_N; FyR_N];
 
 
-FxF_N = FxF_N1;
-FxR_N = FxR_N1;
-FyF_N = FyF_N1;
-FyR_N = FyR_N1;
+% FxF_N = FxF_N1;
+% FxR_N = FxR_N1;
+% FyF_N = FyF_N1;
+% FyR_N = FyR_N1;
 
 % calculate accelerations
 ax_stm = (FxF_N*cos(DeltaWheel_rad) - FyF_N*sin(DeltaWheel_rad) + FxR_N - FxFriction + extForces_N(1))/m;
