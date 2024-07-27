@@ -11,3 +11,5 @@ __pycache__/
 .vscode/*
 *.csv
 inputs/trainingdata/data_with_wheelspeed_slips.zip
+*.png
+*.fig
