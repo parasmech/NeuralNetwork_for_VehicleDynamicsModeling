@@ -25,24 +25,24 @@ def select_optimizer(optimizer: str,
     """
 
     if optimizer == 'ADAM':
-        optimizer = optimizers.Adam(lr=learning_rate,
+        optimizer = optimizers.Adam(learning_rate=learning_rate,
                                     clipnorm=clipnorm)  # , beta_1=0.9, beta_2=0.999)
 
     if optimizer == 'SGD':
-        optimizer = optimizers.SGD(lr=learning_rate,
+        optimizer = optimizers.SGD(learning_rate=learning_rate,
                                    nesterov=True,
                                    clipnorm=clipnorm)
 
     if optimizer == 'RMSPROP':
-        optimizer = optimizers.RMSprop(lr=learning_rate,
+        optimizer = optimizers.RMSprop(learning_rate=learning_rate,
                                        momentum=0.9,
                                        clipnorm=clipnorm)
 
     if optimizer == 'ADADELTA':
-        optimizer = optimizers.Adadelta(lr=learning_rate)  # , rho=0.95)
+        optimizer = optimizers.Adadelta(learning_rate=learning_rate)  # , rho=0.95)
 
     if optimizer == 'Nesterov-ADAM':
-        optimizer = optimizers.Nadam(lr=learning_rate,
+        optimizer = optimizers.Nadam(learning_rate=learning_rate,
                                      clipnorm=clipnorm)  # , beta_1=0.91, beta_2=0.997)
 
     return optimizer
