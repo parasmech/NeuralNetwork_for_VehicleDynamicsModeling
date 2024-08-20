@@ -1,8 +1,9 @@
+
 [General]
 
 # plot settings
-plot_result = false
-plot_mse = false
+plot_result = true
+plot_mse = true
 save_figures = true
 
 min_scale_plot = 0
@@ -39,7 +40,7 @@ epochs = 800
 # THESE ARE THE DESIGN PARAMETERS OF THE NEURAL NETWORK
 input_shape = 10        # number of independent input parameters
 input_timesteps = 5     # number of previous vehicle states to inlcude into neural network input
-output_shape = 5        # number of vehicle states (output of NN); DO NOT CHANGE
+output_shape = 3        # number of vehicle states (output of NN); DO NOT CHANGE
 learning_rate = 0.0004  # should not exceed 0.0005
 
 # WEIGHT REGULARIZATION
@@ -104,8 +105,8 @@ activation_end = 'linear'
 # PARAMETERS FOR THE RUN SEQUENCE
 [Test]
 
-run_timespan = 1500     # number of timesteps covered. timespan = number of timesteps * timestep_length
+run_timespan = 10000     # number of timesteps covered. timespan = number of timesteps * timestep_length
 run_timestart = 0       # start timestep
 
-n_test = 37
-iteration_step = 1250   # run a test every iteration_step index (row index of test data file) 
+n_test = 40
+iteration_step = 9995   # run a test every iteration_step index (row index of test data file) 
