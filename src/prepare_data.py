@@ -9,6 +9,17 @@ Created by: Rainer Trauth
 Created on: 01.04.2020
 """
 
+def extract_partial_scaler(scaler, num_vars):
+    """Extracts a partial scaler for the first `num_vars` variables from the original scaler."""
+    new_scaler = StandardScaler()
+    new_scaler.mean_ = scaler.mean_[:num_vars]
+    new_scaler.scale_ = scaler.scale_[:num_vars]
+    new_scaler.var_ = scaler.var_[:num_vars]
+    new_scaler.n_features_in_ = num_vars
+    new_scaler.n_samples_seen_ = scaler.n_samples_seen_
+    if hasattr(scaler, 'feature_names_in_'):
+        new_scaler.feature_names_in_ = scaler.feature_names_in_[:num_vars]
+    return new_scaler
 
 def scaler(path_dict: dict,
            params_dict: dict,
@@ -130,6 +141,45 @@ def scaler_reverse(path2scaler: str,
 
     return dataset_std_rev
 
+# ----------------------------------------------------------------------------------------------------------------------
+
+def scaler_reverse_new(path_dict: dict,
+                   path2scaler: str,
+                   params_dict: dict,
+                   dataset: np.array) -> np.array:
+    """Rescaled dataset to physical quantities.
+
+    :param path_dict:           dictionary which contains paths to all relevant folders and files of this module
+    :type path_dict: dict
+    :param params_dict:         dictionary which contains all parameters necessary to run this module
+    :type params_dict: dict
+    :param dataset:             dataset which should get rescaled
+    :type dataset: np.array
+    :return:                    rescaled dataset
+    :rtype: np.array
+    """
+
+    print('TRANSFORM RESULT WITH SCALER TO PHYSICAL QUANTITIES')
+
+    if params_dict['General']['scaler_mode'] == 2:
+
+        with open(os.path.join(path_dict['path2inputs_trainedmodels'], 'scaler_tanh'), 'rb') as f:
+            m, std = pickle.load(f)
+            dataset_std_rev = m + 100 * std * np.arctanh(2 * dataset - 1)
+
+    else:
+        scalers = load(path2scaler)
+        partial_scaler = extract_partial_scaler(scalers, 3)
+        # Reshape the dataset to 2D if it's 3D
+        if isinstance(dataset, list):
+            dataset = np.array(dataset)
+        if dataset.ndim == 3:
+            dataset = dataset.reshape(dataset.shape[0], -1)
+        dataset_std_rev = partial_scaler.inverse_transform(dataset)
+
+    return dataset_std_rev
+    #return dataset
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -170,15 +220,17 @@ def create_dataset_separation_run(data_test: np.array,
         initials = np.reshape(initials, (1, input_timesteps, input_shape))
 
     # get vehicle input data of test data file
-    steeringangle_rad = data_test[start + input_timesteps:start + duration, output_shape]
+    ax = data_test[start + input_timesteps:start + duration, output_shape]
+    ay = data_test[start + input_timesteps:start + duration, output_shape+1]
+    steeringangle_rad = data_test[start + input_timesteps:start + duration, output_shape+2]
 
-    torqueRL_Nm = data_test[start + input_timesteps:start + duration, output_shape + 1]
-    torqueRR_Nm = data_test[start + input_timesteps:start + duration, output_shape + 2]
+    torqueRL_Nm = data_test[start + input_timesteps:start + duration, output_shape + 3]
+    torqueRR_Nm = data_test[start + input_timesteps:start + duration, output_shape + 4]
 
-    brakepresF_bar = data_test[start + input_timesteps:start + duration, output_shape + 3]
-    brakepresR_bar = data_test[start + input_timesteps:start + duration, output_shape + 4]
+    brakepresF_bar = data_test[start + input_timesteps:start + duration, output_shape + 5]
+    brakepresR_bar = data_test[start + input_timesteps:start + duration, output_shape + 6]
 
-    return initials, steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar
+    return initials, ax,ay,steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar
 
 
 # ----------------------------------------------------------------------------------------------------------------------
