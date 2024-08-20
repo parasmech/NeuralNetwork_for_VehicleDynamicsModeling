@@ -109,6 +109,17 @@ def plot_run(path_dict: dict,
     for row_head, row_data in zip(row_header, data):
         print(row_format.format(row_head, *row_data))
 
+        # Save data to CSV
+    output_path = os.path.join(path_dict['path2results_matfiles'], 'mse_unscaled_' + str(counter) + '.csv')
+
+    # Specifying format for each column
+    np.savetxt(output_path, data, delimiter=',', fmt='%.6f')  # You can adjust the format '%.6f' as needed
+
+    print(f'Data saved to {output_path}')
+
+    # np.savetxt(os.path.join(path_dict['path2results_matfiles'], 'mse_unscaled_' + str(counter) + '.csv'),
+    #            data)
+
     print('MSE AND MAE OF SCALED VALUES: ' + 'Test No. ' + str(counter))
 
     data = np.asarray([mean_squared_error(yaw_label_scaled, yaw_result_scaled),
@@ -124,6 +135,17 @@ def plot_run(path_dict: dict,
 
     for row_head, row_data in zip(row_header, data):
         print(row_format.format(row_head, *row_data))
+
+    # Save data to CSV
+    output_path = os.path.join(path_dict['path2results_matfiles'], 'mse_scaled_' + str(counter) + '.csv')
+
+    # Specifying format for each column
+    np.savetxt(output_path, data, delimiter=',', fmt='%.6f')  # You can adjust the format '%.6f' as needed
+
+    print(f'Data saved to {output_path}')
+
+    # np.savetxt(os.path.join(path_dict['path2results_matfiles'], 'mse_scaled_'  + str(counter) + '.csv'),
+    #            data[0:3])
 
     print('\n')
 
