@@ -68,15 +68,15 @@ def run_nn(path_dict: dict,
                                        params_dict=params_dict,
                                        dataset=data)
 
-    initial, steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar = \
+    initial, ax,ay,steeringangle_rad, torqueRL_Nm, torqueRR_Nm, brakepresF_bar, brakepresR_bar = \
         src.prepare_data.create_dataset_separation_run(data, params_dict, startpoint,
                                                        params_dict['Test']['run_timespan'], nn_mode)
-
+    
     # load neural network model
     model = keras.models.load_model(path2model)
 
     results = np.zeros((len(torqueRR_Nm) + input_timesteps, input_shape))
-
+    last_layer_outputs = []
     if nn_mode == "feedforward":
         new_input = np.zeros((1, input_shape * input_timesteps))
 
@@ -99,6 +99,8 @@ def run_nn(path_dict: dict,
         result_process = model.predict(data_convert)
         results[i_count + input_timesteps, 0:output_shape] = result_process
 
+        # Extract last layer output and append to list
+        last_layer_outputs.append(result_process)
         # convert test data
         if nn_mode == "feedforward":
             temp = np.zeros((1, input_shape * input_timesteps))
@@ -107,22 +109,27 @@ def run_nn(path_dict: dict,
             temp[:, input_shape * (input_timesteps - 1):input_shape * (input_timesteps - 1) + output_shape] \
                 = result_process
 
-            temp[:, input_shape * (input_timesteps - 1) + output_shape] = steeringangle_rad[i_count]
-            temp[:, input_shape * (input_timesteps - 1) + output_shape + 1] = torqueRL_Nm[i_count]
-            temp[:, input_shape * (input_timesteps - 1) + output_shape + 2] = torqueRR_Nm[i_count]
-            temp[:, input_shape * (input_timesteps - 1) + output_shape + 3] = brakepresF_bar[i_count]
-            temp[:, input_shape * (input_timesteps - 1) + output_shape + 4] = brakepresR_bar[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape] = ax[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape+1] = ay[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape+2] = steeringangle_rad[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape + 3] = torqueRL_Nm[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape + 4] = torqueRR_Nm[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape + 5] = brakepresF_bar[i_count]
+            temp[:, input_shape * (input_timesteps - 1) + output_shape + 6] = brakepresR_bar[i_count]
 
         elif nn_mode == "recurrent":
             temp = np.zeros((1, input_timesteps, input_shape))
             temp[0, 0:input_timesteps - 1, :] = data_convert[0, 1:input_timesteps, :]
 
             temp[0, input_timesteps - 1, 0:output_shape] = result_process
-            temp[0, input_timesteps - 1, output_shape] = steeringangle_rad[i_count]
-            temp[0, input_timesteps - 1, output_shape + 1] = torqueRL_Nm[i_count]
-            temp[0, input_timesteps - 1, output_shape + 2] = torqueRR_Nm[i_count]
-            temp[0, input_timesteps - 1, output_shape + 3] = brakepresF_bar[i_count]
-            temp[0, input_timesteps - 1, output_shape + 4] = brakepresR_bar[i_count]
+
+            temp[0, input_timesteps - 1, output_shape] = ax[i_count]
+            temp[0, input_timesteps - 1, output_shape+1] = ay[i_count]
+            temp[0, input_timesteps - 1, output_shape+2] = steeringangle_rad[i_count]
+            temp[0, input_timesteps - 1, output_shape + 3] = torqueRL_Nm[i_count]
+            temp[0, input_timesteps - 1, output_shape + 4] = torqueRR_Nm[i_count]
+            temp[0, input_timesteps - 1, output_shape + 5] = brakepresF_bar[i_count]
+            temp[0, input_timesteps - 1, output_shape + 6] = brakepresR_bar[i_count]
 
         new_input = temp
 
@@ -133,5 +140,12 @@ def run_nn(path_dict: dict,
                                               params_dict=params_dict,
                                               dataset=results)
 
+    last_layer_outputs = src.prepare_data.scaler_reverse_new(path_dict=path_dict,
+                                              path2scaler=path2scaler,
+                                              params_dict=params_dict,
+                                              dataset=last_layer_outputs)
+
     np.savetxt(os.path.join(path_dict['path2results_matfiles'], 'prediction_result_' + nn_mode + str(counter) + '.csv'),
                results)
+    np.savetxt(os.path.join(path_dict['path2results_matfiles'], f'last_layer_output_{nn_mode}_{counter}.csv'),
+               np.array(last_layer_outputs).squeeze(), delimiter=',')
