@@ -55,15 +55,15 @@ def manage_paths() -> dict:
 
     path_dict['filepath2scaler_load'] = os.path.join(path_dict['path2inputs_trainedmodels'], 'scaler.plk')
     path_dict['filepath2inputs_trainedmodel_ff'] = os.path.join(path_dict['path2inputs_trainedmodels'],
-                                                                'keras_model.h5')
+                                                                'keras_model.keras')
     path_dict['filepath2inputs_trainedmodel_recurr'] = os.path.join(path_dict['path2inputs_trainedmodels'],
-                                                                    'keras_model_recurrent.h5')
+                                                                    'keras_model_recurrent.keras')
 
     # file name of output data: trained models
     path_dict['filepath2scaler_save'] = os.path.join(path_dict['path2results'], 'scaler.plk')
-    path_dict['filepath2results_trainedmodel_ff'] = os.path.join(path_dict['path2results'], 'keras_model.h5')
+    path_dict['filepath2results_trainedmodel_ff'] = os.path.join(path_dict['path2results'], 'keras_model.keras')
     path_dict['filepath2results_trainedmodel_recurr'] = os.path.join(path_dict['path2results'],
-                                                                     'keras_model_recurrent.h5')
+                                                                     'keras_model_recurrent.keras')
 
     # check if folders exist and create new ones -----------------------------------------------------------------------
 
