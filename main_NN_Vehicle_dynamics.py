@@ -59,6 +59,7 @@ if params_dict['NeuralNetwork_Settings']['model_mode'] == 2:
 if params_dict['NeuralNetwork_Settings']['run_file_mode'] == 0:
     sys.exit('SYSTEM EXIT: exit due to run_file_mode is set to zero to avoid testing the neural network against '
              + 'vehicle sensor data')
+mse_mae_results = {}
 
 for i_count in range(0, params_dict['Test']['n_test']):
 
@@ -83,7 +84,25 @@ for i_count in range(0, params_dict['Test']['n_test']):
                                      nn_mode="recurrent")
 
     # save and plot results (if activated in parameter file)
-    visualization.plot_results.plot_run(path_dict=path_dict,
+    
+    results = visualization.plot_results.plot_run(path_dict=path_dict,
                                         params_dict=params_dict,
                                         counter=i_count,
                                         start=idx_start)
+    
+    mse_mae_results.update(results)
+
+    import csv
+    import os
+
+    with open(os.path.join(path_dict['path2results_figures'], 'mse_mae_results.csv'), 'w', newline='') as csvfile:
+
+      fieldnames = ['Test', 'Metric', 'Value']
+      writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+      writer.writeheader()
+      for test, results in mse_mae_results.items():
+          for scale, metrics in results.items():
+              for metric, values in metrics.items():
+                  for component, value in values.items():
+                      writer.writerow({'Test': test, 'Metric': f'{scale}_{metric}_{component}', 'Value': value})
