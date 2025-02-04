@@ -78,7 +78,7 @@ def scaler(path_dict: dict,
             dump(scalers, path_dict['filepath2scaler_save'])
 
     return dataset_out
-
+    # return dataset
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -108,6 +108,7 @@ def scaler_run(path2scaler: str,
         dataset_out = scalers.transform(dataset)
 
     return dataset_out
+    # return dataset
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -140,6 +141,7 @@ def scaler_reverse(path2scaler: str,
         dataset_std_rev = scalers.inverse_transform(dataset)
 
     return dataset_std_rev
+    # return dataset
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -178,7 +180,7 @@ def scaler_reverse_new(path_dict: dict,
         dataset_std_rev = partial_scaler.inverse_transform(dataset)
 
     return dataset_std_rev
-    #return dataset
+    # return dataset
 
 
 # ----------------------------------------------------------------------------------------------------------------------
