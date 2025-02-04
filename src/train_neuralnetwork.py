@@ -1,10 +1,10 @@
 import os.path
 import shutil
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau, TerminateOnNaN
-
+import json
 import src
 import visualization
-
+from tensorflow import keras
 """
 Created by: Rainer Trauth
 Created on: 01.04.2020
@@ -87,6 +87,7 @@ def train_neuralnetwork(path_dict: dict,
                                                   params_dict=params_dict,
                                                   nn_mode=nn_mode)
 
+
     history_mod = model.fit(x=train_data[0],
                             y=train_data[1],
                             batch_size=params_dict['NeuralNetwork_Settings']['batch_size'],
@@ -94,8 +95,7 @@ def train_neuralnetwork(path_dict: dict,
                             epochs=params_dict['NeuralNetwork_Settings']['epochs'],
                             verbose=1,
                             shuffle=True,
-                            callbacks=[reduce_lr_loss, es, mc, Nan],
-                            use_multiprocessing=True)
+                            callbacks=[reduce_lr_loss, es, mc, Nan])
 
     print(history_mod.history.keys())
 
