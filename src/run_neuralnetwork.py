@@ -3,7 +3,7 @@ import sys
 from tqdm import tqdm
 import os.path
 from tensorflow import keras
-
+import ipdb
 # custom modules
 import src
 
@@ -130,7 +130,7 @@ def run_nn(path_dict: dict,
             temp[0, input_timesteps - 1, output_shape + 4] = torqueRR_Nm[i_count]
             temp[0, input_timesteps - 1, output_shape + 5] = brakepresF_bar[i_count]
             temp[0, input_timesteps - 1, output_shape + 6] = brakepresR_bar[i_count]
-
+        # ipdb.set_trace(context=6)
         new_input = temp
 
     results[:, output_shape:input_shape] = data[startpoint:startpoint + len(steeringangle_rad) + input_timesteps,
