@@ -1,4 +1,3 @@
-
 [General]
 
 # plot settings
@@ -55,7 +54,7 @@ reduceLR_factor = 0.8
 patience_LR = 10
 
 # DROPOUT PARAMS
-bool_use_dropout = false # true: apply dropout, false: do not apply dropout
+bool_use_dropout = true # true: apply dropout, false: do not apply dropout
 drop_1 = 0
 drop_2 = 0
 
@@ -66,8 +65,8 @@ Initializer = "he"
 [NeuralNetwork_Settings.Feedforward]
 
 # NUMBER OF NEURONS FIRST AND SECOND LAYER
-neurons_first_layer = 50
-neurons_second_layer = 50
+neurons_first_layer = 150
+neurons_second_layer = 150
 
 # ACTIVATION FUNCTIONS OF THE LAYERS
 leakyrelu = 1  # if 1, use leaky relu. activation 1 and 2 should be None
@@ -85,8 +84,8 @@ neurons_first_layer_recurrent = 150
 neurons_second_layer_recurrent = 150
 
 # ACTIVATION FUNCTIONS OF THE RECURRENT LAYERS
-activation_1_recurrent = 'tanh'
-activation_dense_recurrent = 'tanh'
+activation_1_recurrent = 'relu'
+activation_dense_recurrent = 'relu'
 
 
 [NeuralNetwork_Settings.Optimizer]
@@ -108,5 +107,5 @@ activation_end = 'linear'
 run_timespan = 10000     # number of timesteps covered. timespan = number of timesteps * timestep_length
 run_timestart = 0       # start timestep
 
-n_test = 40
+n_test = 15
 iteration_step = 9995   # run a test every iteration_step index (row index of test data file) 
