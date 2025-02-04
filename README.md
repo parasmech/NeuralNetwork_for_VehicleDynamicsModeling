@@ -72,33 +72,32 @@ The data format is equal to the ``data_to_train`` files and is described above.
 ## Running the code:
 
 The training process of the neural network has two different modes (switch via parameter settings):
-* Mode 1 --> Feedforward Model
-* Mode 2 --> Recurrent Model (GRU, LSTM, ...)
+* Mode 1 --> End to End Feedforward  and PINNS (with Feedforward network to estimate tire packeja coefficients)
+* Mode 2 --> End to End with Recurrent Model (GRU, LSTM, ...)
 
 ### Training a new NN model
-Following steps are necessary to run the training process:
-1. Open `/params/parameters.toml` and set parameters (you can find good hyperparameters to start with in the instructions below).
-2. Set parameter ``model_mode`` in section ``NeuralNetwork_Settings`` to the Neural Network type which should be used (0 --> No training, 1 --> Feedforward, 2--> Recurrent).
-3. Set optimizer parameters in section ``NeuralNetwork_Settings.Optimizer``.
-4. Optional: Change the NN model architecture in ``src/neural_network_fcn.py``, e.g. add a layer.
-5. Run ``main_NN_Vehicle_dynamics.py``.
-6. The results will be saved in the ``\outputs`` folder.
+We provide trained models for ETE with Feedforward, ETE with GRU (recurrent), PINNS with Feedforward.
+All the trained models are available in ``/inputs/trainedmodels/``.
+- PINNS with Feedforward --> keras_model.keras
+- ETE with Feedforward --> keras_model_ETE_FF.keras
+- ETE with GRU (recurrent) --> keras_model_recurrent.keras
+
+1. For running PINNS with Feedforward, please go to this branch
+   https://github.com/parasmech/NeuralNetwork_for_VehicleDynamicsModeling/tree/PINN_vs_SimulinkModel
+   Set parameter ``model_mode`` in section ``NeuralNetwork_Settings`` to 1 for PINNS with Feedforward.
+2. For running ETE with Feedforward and running ETE with GRU, please go to this branch     
+   https://github.com/parasmech/NeuralNetwork_for_VehicleDynamicsModeling/tree/ETE_1ms
+   Set parameter ``model_mode`` in section ``NeuralNetwork_Settings`` to 1 for ETE with Feedforward and 2 for ETE with GRU.
+3. Set parameter ``bool_load_existingmodel`` in section ``General`` to True.
+4. Run ``main_NN_Vehicle_dynamics.py``.
+5. The results will be saved in the ``\outputs`` folder.
 
 **Note:**\
 You can train the NN and subsequently test it at once. Set both parameters ``model_mode`` and ``run_mode`` to 1 or 2, respectively.
 
-### Retrain an existing NN model
-An already existing model can be retrained on new training data. Therefore, an existing model has to be provided in ``/inputs/trainedmodels/``.
-
-1. Set parameter ``model_mode`` in section ``NeuralNetwork_Settings`` to 1 or 2, respectively.
-2. Set parameter ``bool_load_existingmodel`` in section ``General`` to True.
-3. Copy new training data into ``/inputs/trainingdata/`` with the above mentioned naming.
-4. Run ``main_NN_Vehicle_dynamics.py``.
-5. The results will be saved in the ``\outputs`` folder.
-
 ### Run a test against real vehicle data
 The test mode can be run independently of the model training. Therefore, an already trained model has to be provided in ``/inputs/trainedmodels/``.
-Copy both files ``keras_model.h5`` and ``scaler.plk`` into ``/inputs/trainedmodels/``. The filenames must be retained.
+Copy both files ``keras_model.keras`` and ``scaler.plk`` into ``/inputs/trainedmodels/``. The filenames must be retained.
 These files are generated as a result of the training process and are save in ``/outputs``.
 
 1. Set parameter ``model_mode`` in section ``NeuralNetwork_Settings`` to 0 and ``run_mode`` to 1 or 2, respectively (depending on which NN should be used for testing: 1 -> Feedforward, 2 -> Recurrent).
