@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import os.path
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
-
+from tensorflow.keras.models import load_model, Model
+import numpy as np
 """
 Created by: Rainer Trauth
 Created on: 01.04.2020
@@ -86,7 +87,7 @@ def plot_run(path_dict: dict,
     # print deviation from label
 
     round_digits = 5
-
+    mse_mae_results = {}
     print('\n')
     print('MSE AND MAE OF UNSCALED VALUES: ' + 'Test No. ' + str(counter))
 
@@ -109,7 +110,32 @@ def plot_run(path_dict: dict,
     for row_head, row_data in zip(row_header, data):
         print(row_format.format(row_head, *row_data))
 
+        # Save data to CSV
+    output_path = os.path.join(path_dict['path2results_matfiles'], 'mse_unscaled_' + str(counter) + '.csv')
+
+    # Specifying format for each column
+    np.savetxt(output_path, data, delimiter=',', fmt='%.6f')  # You can adjust the format '%.6f' as needed
+
+
     print('MSE AND MAE OF SCALED VALUES: ' + 'Test No. ' + str(counter))
+    mse_mae_results[counter] = {
+        'unscaled': {
+            'MSE': {
+                'yaw_rate': mean_squared_error(yaw_label, yaw_result),
+                'longitudinal_velocity': mean_squared_error(vx_label, vx_result),
+                'lateral_velocity': mean_squared_error(vy_label, vy_result),
+                'longitudinal_acceleration': mean_squared_error(ax_label, ax_result),
+                'lateral_acceleration': mean_squared_error(ay_label, ay_result)
+            },
+            'MAE': {
+                'yaw_rate': mean_absolute_error(yaw_label, yaw_result),
+                'longitudinal_velocity': mean_absolute_error(vx_label, vx_result),
+                'lateral_velocity': mean_absolute_error(vy_label, vy_result),
+                'longitudinal_acceleration': mean_absolute_error(ax_label, ax_result),
+                'lateral_acceleration': mean_absolute_error(ay_label, ay_result)
+            }
+        }
+    }
 
     data = np.asarray([mean_squared_error(yaw_label_scaled, yaw_result_scaled),
                        mean_squared_error(vx_label_scaled, vx_result_scaled),
@@ -125,6 +151,30 @@ def plot_run(path_dict: dict,
     for row_head, row_data in zip(row_header, data):
         print(row_format.format(row_head, *row_data))
 
+    # Save data to CSV
+    output_path = os.path.join(path_dict['path2results_matfiles'], 'mse_scaled_' + str(counter) + '.csv')
+    # Specifying format for each column
+    np.savetxt(output_path, data, delimiter=',', fmt='%.6f')  # You can adjust the format '%.6f' as needed
+
+    print(f'Data saved to {output_path}')
+
+    mse_mae_results[counter]['scaled'] = {
+        'MSE': {
+            'yaw_rate': mean_squared_error(yaw_label_scaled, yaw_result_scaled),
+            'longitudinal_velocity': mean_squared_error(vx_label_scaled, vx_result_scaled),
+            'lateral_velocity': mean_squared_error(vy_label_scaled, vy_result_scaled),
+            'longitudinal_acceleration': mean_squared_error(ax_label_scaled, ax_result_scaled),
+            'lateral_acceleration': mean_squared_error(ay_label_scaled, ay_result_scaled)
+        },
+        'MAE': {
+            'yaw_rate': mean_absolute_error(yaw_label_scaled, yaw_result_scaled),
+            'longitudinal_velocity': mean_absolute_error(vx_label_scaled, vx_result_scaled),
+            'lateral_velocity': mean_absolute_error(vy_label_scaled, vy_result_scaled),
+            'longitudinal_acceleration': mean_absolute_error(ax_label_scaled, ax_result_scaled),
+            'lateral_acceleration': mean_absolute_error(ay_label_scaled, ay_result_scaled)
+        }
+    }
+
     print('\n')
 
     # plot and save comparsion between NN predicted and actual vehicle state
@@ -139,7 +189,7 @@ def plot_run(path_dict: dict,
     plot_and_save(params_dict, ax_result, ax_label, ax_diff, 'Long. acc. ax in m/s2',
                   os.path.join(path_dict['path2results_figures'], 'ax' + str(counter) + '.png'))
 
-
+    return mse_mae_results
 # ----------------------------------------------------------------------------------------------------------------------
 
 def plot_and_save(params_dict: dict,
